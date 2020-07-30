@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Article;
+use App\Http\Resources\Article as ArticleResource;
+use App\Http\Resources\ArticleCollection;
 
 class ArticleControler extends Controller
 {
     //
     public function index(){
-        return Article::all();
+        return new ArticleCollection(Article::paginate());
     }
     public function show(Article $article){
-        return $article;
+        return response()->json(new ArticleResource($article),200);
     }
     public function store(Request $request){
         $article = Article::create($request->all());
