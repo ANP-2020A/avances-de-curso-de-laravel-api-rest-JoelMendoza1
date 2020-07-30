@@ -11,6 +11,13 @@ use App\Http\Resources\ArticleCollection;
 class ArticleControler extends Controller
 {
     //
+    private static $rules=[
+        'title' => 'required|string|unique:articles|max:255',
+        'body' => 'required',
+    ];
+    private static $messages=[
+
+    ];
     public function index(){
         return new ArticleCollection(Article::paginate());
     }
@@ -18,6 +25,9 @@ class ArticleControler extends Controller
         return response()->json(new ArticleResource($article),200);
     }
     public function store(Request $request){
+
+        $request->validate(self::$rules,self:: $messages);
+
         $article = Article::create($request->all());
         return response()->json($article,201);
     }
